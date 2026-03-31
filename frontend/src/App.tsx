@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import ReactFlow, { 
   Background, 
   Controls, 
@@ -46,12 +46,25 @@ const getLayoutedElements = (nodes: Node[], edges: Edge[], direction = 'LR') => 
   return { nodes: layoutedNodes, edges };
 };
 
+const DOMAINS = [
+  { id: 'agent', label: 'Agents & Commands', icon: <Layers size={14}/>, color: 'text-indigo-600 bg-indigo-50 border-indigo-200' },
+  { id: 'tool', label: 'Tools', icon: <Wrench size={14}/>, color: 'text-blue-600 bg-blue-50 border-blue-200' },
+  { id: 'mcp', label: 'MCP Integration', icon: <Network size={14}/>, color: 'text-emerald-600 bg-emerald-50 border-emerald-200' },
+  { id: 'api', label: 'API & Network', icon: <Server size={14}/>, color: 'text-amber-600 bg-amber-50 border-amber-200' },
+  { id: 'state', label: 'State & Memory', icon: <Database size={14}/>, color: 'text-rose-600 bg-rose-50 border-rose-200' },
+  { id: 'ui', label: 'Terminal UI', icon: <Monitor size={14}/>, color: 'text-sky-600 bg-sky-50 border-sky-200' },
+  { id: 'engine', label: 'Core Engine', icon: <Cpu size={14}/>, color: 'text-purple-600 bg-purple-50 border-purple-200' },
+  { id: 'boot', label: 'Bootloader', icon: <Terminal size={14}/>, color: 'text-orange-600 bg-orange-50 border-orange-200' },
+  { id: 'render', label: 'Ink Renderer', icon: <LayoutTemplate size={14}/>, color: 'text-fuchsia-600 bg-fuchsia-50 border-fuchsia-200' },
+  { id: 'voice', label: 'Voice Module', icon: <Mic size={14}/>, color: 'text-cyan-600 bg-cyan-50 border-cyan-200' }
+];
+
 const CustomNode = ({ data }: { data: any }) => {
   const g = data.group;
   const domain = DOMAINS.find(d => d.id === g) || DOMAINS[0];
 
   return (
-    <div className="px-4 py-3 shadow-sm rounded-xl border border-gray-200 bg-white/95 backdrop-blur-md transition-all duration-200 hover:shadow-md cursor-pointer w-[340px] min-h-[128px] flex flex-col justify-between">
+    <div className="nodrag px-4 py-3 shadow-sm rounded-xl border border-gray-200 bg-white/95 backdrop-blur-md transition-all duration-200 hover:shadow-md cursor-pointer w-[340px] min-h-[128px] flex flex-col justify-between active:scale-[0.98]">
       <Handle type="target" position={Position.Left} className="w-2 h-2 !bg-slate-400 border-none opacity-0" />
       
       <div className="flex items-start justify-between gap-3 w-full">
@@ -98,23 +111,9 @@ const CustomNode = ({ data }: { data: any }) => {
   );
 };
 
-const DOMAINS = [
-  { id: 'agent', label: 'Agents & Commands', icon: <Layers size={14}/>, color: 'text-indigo-600 bg-indigo-50 border-indigo-200' },
-  { id: 'tool', label: 'Tools', icon: <Wrench size={14}/>, color: 'text-blue-600 bg-blue-50 border-blue-200' },
-  { id: 'mcp', label: 'MCP Integration', icon: <Network size={14}/>, color: 'text-emerald-600 bg-emerald-50 border-emerald-200' },
-  { id: 'api', label: 'API & Network', icon: <Server size={14}/>, color: 'text-amber-600 bg-amber-50 border-amber-200' },
-  { id: 'state', label: 'State & Memory', icon: <Database size={14}/>, color: 'text-rose-600 bg-rose-50 border-rose-200' },
-  { id: 'ui', label: 'Terminal UI', icon: <Monitor size={14}/>, color: 'text-sky-600 bg-sky-50 border-sky-200' },
-  { id: 'engine', label: 'Core Engine', icon: <Cpu size={14}/>, color: 'text-purple-600 bg-purple-50 border-purple-200' },
-  { id: 'boot', label: 'Bootloader', icon: <Terminal size={14}/>, color: 'text-orange-600 bg-orange-50 border-orange-200' },
-  { id: 'render', label: 'Ink Renderer', icon: <LayoutTemplate size={14}/>, color: 'text-fuchsia-600 bg-fuchsia-50 border-fuchsia-200' },
-  { id: 'voice', label: 'Voice Module', icon: <Mic size={14}/>, color: 'text-cyan-600 bg-cyan-50 border-cyan-200' }
-];
-
-
+const nodeTypes = { customNode: CustomNode };
 
 export default function App() {
-  const nodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [baseNodes, setBaseNodes] = useState<Node[]>([]);
@@ -128,7 +127,7 @@ export default function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    fetch('/graph.json')
+    fetch(`/graph.json?v=${new Date().getTime()}`)
       .then(res => res.json())
       .then((data) => {
         const mappedEdges = (data.edges || []).map((e: any) => ({
@@ -164,7 +163,6 @@ export default function App() {
     setSelectedNode(null); 
   }, [baseNodes, baseEdges, activeDomains, setNodes, setEdges]);
 
-  // Highlight & Search logic
   useEffect(() => {
     const isSearching = searchQuery.trim().length > 0;
     const lowerQuery = searchQuery.toLowerCase();
@@ -259,9 +257,9 @@ export default function App() {
   }
 
   return (
-    <div className="h-screen w-screen relative bg-slate-50">
-
-      <nav className="fixed top-2 md:top-4 left-2 right-2 md:left-4 md:right-4 z-50 rounded-xl border border-gray-200 bg-white/90 backdrop-blur-xl shadow-sm p-3 flex flex-col md:flex-row gap-3 md:gap-0 md:items-center justify-between">
+    <div className="h-[100dvh] w-screen relative bg-slate-50 overflow-hidden">
+      
+      <nav className="absolute top-2 md:top-4 left-2 right-2 md:left-4 md:right-4 z-50 rounded-xl border border-gray-200 bg-white/90 backdrop-blur-xl shadow-sm p-3 flex flex-col md:flex-row gap-3 md:gap-0 md:items-center justify-between">
         <div className="flex items-center justify-between w-full md:w-auto">
           <div className="flex items-center gap-3">
             <div className="bg-slate-900 text-white p-2 rounded-lg shrink-0">
@@ -302,10 +300,10 @@ export default function App() {
         </div>
       </nav>
 
-      <div className={`fixed z-40 top-[115px] md:top-24 left-2 right-2 md:left-4 md:right-auto md:w-64 max-h-[60vh] md:max-h-[calc(100vh-120px)] overflow-y-auto bg-white/95 md:bg-white/90 backdrop-blur-xl border border-gray-200 rounded-xl shadow-2xl md:shadow-sm p-4 custom-scrollbar transition-all duration-300 origin-top ${
+      <div className={`absolute z-40 top-[115px] md:top-24 left-2 right-2 md:left-4 md:right-auto md:w-64 max-h-[60vh] md:max-h-[calc(100vh-120px)] overflow-y-auto bg-white/95 md:bg-white/90 backdrop-blur-xl border border-gray-200 rounded-xl shadow-2xl md:shadow-sm p-4 custom-scrollbar transition-all duration-300 origin-top ${
         isMobileMenuOpen 
           ? 'opacity-100 translate-y-0 visible' 
-          : 'opacity-0 md:opacity-100 md:translate-y-0 md:visible'
+          : 'opacity-0 -translate-y-4 invisible md:opacity-100 md:translate-y-0 md:visible'
       }`}>
         <div className="flex items-center gap-2 mb-3 pb-2 border-b border-gray-100">
           <Filter size={16} className="text-slate-500" />
@@ -349,10 +347,20 @@ export default function App() {
         nodesConnectable={false}
       >
         <Background color="#E2E8F0" gap={24} size={2} />
-    
+        
         <Controls 
           position="bottom-left" 
-          className="bg-white/90 backdrop-blur-sm shadow-lg border border-gray-200 rounded-lg overflow-hidden fill-slate-700" 
+          showInteractive={false}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'absolute',
+            bottom: '24px',
+            left: '16px',
+            margin: 0,
+            zIndex: 50
+          }}
+          className="bg-white/90 backdrop-blur-sm shadow-xl border border-gray-200 rounded-lg overflow-hidden fill-slate-700" 
         />
         
         <MiniMap 
