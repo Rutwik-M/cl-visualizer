@@ -345,13 +345,14 @@ export default function App() {
         }}
         fitView
         minZoom={0.05}
-        className="touch-none"
+        nodesDraggable={false} 
+        nodesConnectable={false}
       >
         <Background color="#E2E8F0" gap={24} size={2} />
-        
+    
         <Controls 
-          position="bottom-center" 
-          className="flex flex-row bg-white/90 backdrop-blur-sm shadow-lg border border-gray-200 rounded-lg overflow-hidden fill-slate-700 mb-8 md:mb-6" 
+          position="bottom-left" 
+          className="bg-white/90 backdrop-blur-sm shadow-lg border border-gray-200 rounded-lg overflow-hidden fill-slate-700" 
         />
         
         <MiniMap 

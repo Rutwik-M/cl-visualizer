@@ -5,27 +5,58 @@ body {
   background-color: #F8FAFC; 
 }
 
-/* Hide default React Flow attribution for a cleaner SaaS look */
 .react-flow__attribution {
   display: none;
 }
 
-/* --- React Flow Horizontal Controls Override --- */
 .react-flow__controls {
   flex-direction: row !important;
 }
 
 .react-flow__controls-button {
   border-bottom: none !important;
-  border-right: 1px solid #E2E8F0 !important; /* Matches Tailwind slate-200 */
+  border-right: 1px solid #E2E8F0 !important;
 }
 
-/* Remove the border from the last button so it doesn't look weird */
 .react-flow__controls-button:last-child {
   border-right: none !important;
 }
 
-/* Optional: Slight hover effect for the buttons to match your theme */
+
 .react-flow__controls-button:hover {
-  background-color: #F8FAFC !important; /* Matches Tailwind slate-50 */
+  background-color: #F8FAFC !important; 
+}
+
+@media (min-width: 768px) {
+  .react-flow__controls {
+    flex-direction: row !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    bottom: 24px !important;
+  }
+  .react-flow__controls-button {
+    border-bottom: none !important;
+    border-right: 1px solid #E2E8F0 !important;
+  }
+  .react-flow__controls-button:last-child {
+    border-right: none !important;
+  }
+  .react-flow__controls-button:hover {
+    background-color: #F8FAFC !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .react-flow__controls {
+    flex-direction: column !important;
+    left: 16px !important;
+    bottom: 24px !important;
+  }
+  .react-flow__controls-button {
+    border-bottom: 1px solid #E2E8F0 !important;
+    border-right: none !important;
+  }
+  .react-flow__controls-button:last-child {
+    border-bottom: none !important;
+  }
 }
