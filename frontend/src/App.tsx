@@ -305,7 +305,7 @@ export default function App() {
       <div className={`fixed z-40 top-[115px] md:top-24 left-2 right-2 md:left-4 md:right-auto md:w-64 max-h-[60vh] md:max-h-[calc(100vh-120px)] overflow-y-auto bg-white/95 md:bg-white/90 backdrop-blur-xl border border-gray-200 rounded-xl shadow-2xl md:shadow-sm p-4 custom-scrollbar transition-all duration-300 origin-top ${
         isMobileMenuOpen 
           ? 'opacity-100 translate-y-0 visible' 
-          : 'opacity-0 -translate-y-4 md:opacity-100 md:translate-y-0 md:visible'
+          : 'opacity-0 md:opacity-100 md:translate-y-0 md:visible'
       }`}>
         <div className="flex items-center gap-2 mb-3 pb-2 border-b border-gray-100">
           <Filter size={16} className="text-slate-500" />
