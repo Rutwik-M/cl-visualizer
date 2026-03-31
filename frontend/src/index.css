@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  background-color: #F8FAFC; 
+}
+
+/* Hide default React Flow attribution for a cleaner SaaS look */
+.react-flow__attribution {
+  display: none;
+}
+
+/* --- React Flow Horizontal Controls Override --- */
+.react-flow__controls {
+  flex-direction: row !important;
+}
+
+.react-flow__controls-button {
+  border-bottom: none !important;
+  border-right: 1px solid #E2E8F0 !important; /* Matches Tailwind slate-200 */
+}
+
+/* Remove the border from the last button so it doesn't look weird */
+.react-flow__controls-button:last-child {
+  border-right: none !important;
+}
+
+/* Optional: Slight hover effect for the buttons to match your theme */
+.react-flow__controls-button:hover {
+  background-color: #F8FAFC !important; /* Matches Tailwind slate-50 */
+}
