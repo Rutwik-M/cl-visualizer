@@ -33,7 +33,7 @@ This project explores how these systems are architected at scale. By writing a c
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/agent-architecture-visualizer.git
+git clone https://github.com/Rutwik-M/cl-visualizer.git
 cd agent-architecture-visualizer
 ```
 
