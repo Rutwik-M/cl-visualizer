@@ -1,4 +1,4 @@
-# 🏗️ Agent Architecture Visualizer
+# Agent Architecture Visualizer
 
 A static analysis and visualization tool designed to map the architecture, dependency graph, and tool-routing logic of enterprise-grade AI Agents.
 
