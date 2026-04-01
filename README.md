@@ -2,8 +2,6 @@
 
 A static analysis and visualization tool designed to map the architecture, dependency graph, and tool-routing logic of enterprise-grade AI Agents.
 
-🚀 **[View the Live Demo on Vercel](#)** ← *Add your Vercel link here*
-
 ---
 
 ## 📖 Overview
